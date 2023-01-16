@@ -5,81 +5,80 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <string.h>
+#include "socket.h"
 
 // #include <netinet/in.h>
 // #include <netinet/ip.h>
 
-#define SERVER_PORT 65000
-#define BUF_SIZE 4096
-
-static int servfd, clientfd;
-static struct sockaddr_in servAddr;
-
-void server_exit(void) {
-	//Close socket
-	if ( close(servfd) == -1 )
-		perror("Can't close socket");
-}
+#define BUF_SIZE 64
 
 int main(int argc, char **argv) {
 
-	uint8_t recvBuff[BUF_SIZE];
+	// uint8_t recvBuf[BUF_SIZE];
+	// memset((void *)recvBuf, '9', BUF_SIZE);
+	// // strcpy(recvBuf, "Hello World flabingus\n");
+	// uint64_t hashKey[4];
+	// // memset(recvBuf, (int)'1', 32);
 
-	atexit(server_exit);
+	// int i;
+	// for (i = 0; i < 32; i++) {
+	// 	printf("%02x", recvBuf[i]);
+	// }
+	// printf("\n");
+	// for (i = 0; i < 32; i++) {
+	// 	printf("%u", recvBuf[i]);
+	// }
+	// printf("\n");
 
-	servAddr.sin_family = AF_INET;
-	servAddr.sin_port = htons(SERVER_PORT);
-	servAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	// if ( getHash((void *)recvBuf, 32, hashKey) == -1 ) {
+	// 	socketClose();
+	// 	return -1;
+	// }
 
-	//Open socket
-	servfd = socket(AF_INET, SOCK_STREAM, 0);
-	if (servfd == -1) {
-		perror("Can't open socket");
-		return -1;
+	// for (i = 0; i < 4; i++) {
+	// 	printf("%lx ", hashKey[i]);
+	// }
+	// printf("\n");
+	// for (i = 0; i < 4; i++) {
+	// 	printf("%lu ", hashKey[i]);
+	// }
+	// printf("\n");
+
+
+	// !Debuging for hex2u256i function
+	const char *string = "2d178a96cc95f1ed70d8ee2621e3f1bbf05f5f725c04a353788d3dce8064b31a";
+	uint64_t key[4];
+	printf("%s\n", string);
+	hex2u256i(string, 64, key);
+	int i;
+	for (i = 0; i < 4; i++) {
+		printf("%lx ", key[i]);
 	}
+	printf("\n");
 
-	//Bind socket
-	if ( bind(servfd, (struct sockaddr *)&servAddr, sizeof(servAddr)) == -1) {
-		perror("Can't bind socket");
-		return -1;
-	}
+	// if ( socketInit() == -1 ) {
+	// 	return -1;
+	// }
 
-	//Listen on socket
-	if ( listen(servfd, 0) == -1 ) {
-		perror("Can't listen on socket");
-		return -1;
-	}
+	// int packetSize = socketListen((void *)recvBuf, BUF_SIZE);
+	// if ( packetSize == -1 ) {
+	// 	socketClose();
+	// 	return -1;
+	// }
 
-	// char *msg = "Hello world\n";
-	// size_t msg_len = strlen(msg);
-	//Clear buffer
-	memset((void *)recvBuff, 0, BUF_SIZE);
-	while(1) {
-		struct sockaddr_in clientAddr = {0};
-		socklen_t clientAddrLen = sizeof(clientAddr);
-		ssize_t bytesRead;
-		
-		clientfd = accept(servfd, (struct sockaddr *)&clientAddr, &clientAddrLen);
-		if (clientfd == -1) {
-			perror("Can't accept connection");
-			return -1;
-		}
+	// if ( getHash((void *)recvBuf, packetSize-4, hashKey) == -1 ) {
+	// 	socketClose();
+	// 	return -1;
+	// }
 
-		bytesRead = read(clientfd, (void *)recvBuff, BUF_SIZE);
-		if (bytesRead == -1) {
-			perror("Can't read from client");
-			close(clientfd);
-			return -1;
-		}
+	// if ( closeCon() == -1 ) {
+	// 	socketClose();
+	// 	return -1;
+	// }
 
-		// ssize_t send_len = send(clientfd, (void *)msg, msg_len, 0);
-		// if ((send_len == -1) || (send_len != msg_len)) {
-		// 	perror("Can't send message");
-		// 	close(clientfd);
-		// 	return -1;
-		// }
-		close(clientfd);
-	}
+	// if ( socketClose() == -1 ) {
+	// 	return -1;
+	// }
 
 	return 0;
 }
