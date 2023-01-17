@@ -16,7 +16,8 @@
 int main(int argc, char **argv) {
 
 	uint8_t recvBuf[BUF_SIZE];
-	uint64_t hashKey[4];
+	uint64_t calcHash[4];
+	uint32_t packetHash;
 
 	if ( socketInit() == -1 ) {
 		return -1;
@@ -28,7 +29,18 @@ int main(int argc, char **argv) {
 		return -1;
 	}
 
-	if ( getHash((void *)recvBuf, packetSize-4, hashKey) == -1 ) {
+	if ( getHash((void *)recvBuf, packetSize-4, calcHash) == -1 ) {
+		closeCon();
+		socketClose();
+		return -1;
+	}
+
+	//Compare the last 4 bytes of the hashes
+	packetHash = *(uint32_t *)(recvBuf + packetSize - 4);
+	packetHash = htonl(packetHash);
+	if ( packetHash != (uint32_t)calcHash[3] ) {
+		fprintf(stderr, "Incorrect hash\n");
+		closeCon();
 		socketClose();
 		return -1;
 	}

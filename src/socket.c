@@ -81,6 +81,7 @@ int socketListen(void *buf, size_t bufSize) {
 	
 	//Get packet length
 	packetLen = *(uint16_t *)(buf+1);
+	packetLen = htons(packetLen);
 	if (bufSize < packetLen) {
 		fprintf(stderr, "Buffer too small to read packet\n");
 		close(clientfd);
@@ -96,6 +97,7 @@ int socketListen(void *buf, size_t bufSize) {
 	}
 	if(bytesRead != packetLen) {
 		fprintf(stderr, "Incomplete packet\n");
+		close(clientfd);
 		return -1;
 	}
 	
