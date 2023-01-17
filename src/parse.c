@@ -102,7 +102,7 @@ uint64_t readQWord(void *packet, int ofst) {
 	} else {	//Convert from big endian to little endian
 		uint64_t valueH = readDWord(packet, ofst);
 		uint64_t valueL = readDWord(packet, ofst+4);
-		value += valueL;
+		value = valueL;
 		value += valueH << 32;
 	}
 	return value;
