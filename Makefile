@@ -19,3 +19,9 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 
 clean:
 	rm -f $(BUILD_DIR)/* $(TARGET) tmp/*
+
+makedb:
+        ./make.sh
+
+rundb:
+        ./db
