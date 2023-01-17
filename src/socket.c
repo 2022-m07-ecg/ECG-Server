@@ -168,7 +168,7 @@ int getHash(const void *msg, size_t msgLen, uint64_t *key) {
 
 void hex2u256i(const char *string, size_t strLen, uint64_t *value) {
 	int i;
-	memset(value, 0, strLen/16);
+	memset(value, 0, strLen/2);
 	for (i = 0; i < strLen; i++) {
 		char curSym = string[i];
 		uint8_t curValue;
@@ -182,7 +182,9 @@ void hex2u256i(const char *string, size_t strLen, uint64_t *value) {
 		else if (curSym >= 'a' && curSym <= 'f')
 			curValue = curSym - 97 + 10;
 
-		uint64_t sigValue = curValue * 16^(i % 16);
+		uint8_t exp = (63-i) % 16;
+		uint64_t sigValue = (uint64_t)1 << (exp*4);	//Avoid using pow(), effectively 16^exp
+		sigValue *= curValue;
 		value[i/16] += sigValue;
 	}
 }
