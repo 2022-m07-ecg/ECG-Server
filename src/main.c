@@ -7,6 +7,7 @@
 #include <string.h>
 #include "socket.h"
 #include "sha256.h"
+#include "parse.h"
 
 // #include <netinet/in.h>
 // #include <netinet/ip.h>
@@ -18,6 +19,7 @@ int main(int argc, char **argv) {
 	uint8_t recvBuf[BUF_SIZE];
 	uint64_t calcHash[4];
 	uint32_t packetHash;
+	uint8_t packetHeader;
 
 	if ( socketInit() == -1 ) {
 		return -1;
@@ -36,13 +38,32 @@ int main(int argc, char **argv) {
 	}
 
 	//Compare the last 4 bytes of the hashes
-	packetHash = *(uint32_t *)(recvBuf + packetSize - 4);
-	packetHash = htonl(packetHash);
+	packetHash = readHash((void *)recvBuf, packetSize);
 	if ( packetHash != (uint32_t)calcHash[3] ) {
 		fprintf(stderr, "Incorrect hash\n");
 		closeCon();
 		socketClose();
 		return -1;
+	}
+
+	packetHeader = parse((void *)recvBuf, packetSize);
+	switch(packetHeader) {
+	case -1:
+		closeCon();
+		socketClose();
+		return -1;
+	
+	case DATA_HEADER:
+		break;
+
+	case ERROR_HEADER:
+		break;
+
+	case NOTIF_HEADER:
+		break;
+
+	case ROT_HEADER:
+		break;
 	}
 
 	if ( closeCon() == -1 ) {
