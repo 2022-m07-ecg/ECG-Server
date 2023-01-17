@@ -21,7 +21,7 @@ clean:
 	rm -f $(BUILD_DIR)/* $(TARGET) tmp/*
 
 makedb:
-        ./make.sh
+	./make.sh
 
 rundb:
-        ./db
+	./db
