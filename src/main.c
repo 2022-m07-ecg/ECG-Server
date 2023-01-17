@@ -6,6 +6,7 @@
 #include <arpa/inet.h>
 #include <string.h>
 #include "socket.h"
+#include "sha256.h"
 
 // #include <netinet/in.h>
 // #include <netinet/ip.h>
