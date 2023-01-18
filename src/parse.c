@@ -46,7 +46,7 @@ int parse(void *packet, int packetSize) {
 		dataLen = (packetSize-PACKET_OVRHD)/10;
 		int i;
 		for (i = 0; i < dataLen; i++) {
-			dataBuffer[i].data = readWord(packet, BODY_OFST + i*10);
+			dataBuffer[i].data = (uint16_t)0x0FFF & readWord(packet, BODY_OFST + i*10);;
 			dataBuffer[i].timeStamp = readQWord(packet, BODY_OFST + i*10 + 2);
 		}
 		break;
