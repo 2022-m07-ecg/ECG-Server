@@ -1,3 +1,5 @@
 build/
 server
 tmp/
+.vscode
+db

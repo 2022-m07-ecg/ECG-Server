@@ -27,9 +27,9 @@ int main() {
 	// Bad practice, hard coded credentials. Just for POC
 	if ( mysql_real_connect(conn, "127.0.0.1", "user", "password", "db", 0, NULL, 0) == NULL) {
 		fprintf(stderr, "%s\n", mysql_error(conn));
+		free(query);
 		exit(1);
 	}
-	printf("Connected\n");
 
 	/* Get the current timestamp */
 	now = time(NULL);
@@ -42,14 +42,14 @@ int main() {
 	/* Execute the query */
 	if (mysql_query(conn, query)) {
 		fprintf(stderr, "%s\n", mysql_error(conn));
+		free(query);
 		exit(1);
 	}
-
-	printf("Record inserted successfully.\n");
 
 	/* Close the connection */
 	mysql_close(conn);
 
+	// Segfaults for some reason
 	free(query);
 
 	printf("Success\n");
