@@ -19,10 +19,15 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 .PHONY: clean
 
 clean:
-	rm -f $(BUILD_DIR)/* $(TARGET) tmp/*
+	rm -f $(BUILD_DIR)/* $(TARGET) tmp/* test/test test/test.o test/input
 
 makedb:
 	./make.sh
 
 rundb:
 	./db
+
+test: test/input_gen.o
+	$(CC) $(LDFLAGS) $^ -o test/input_gen
+test/input_gen.o: test/input_gen.c
+	$(CC) $(CFLAGS) -c $< -o $@

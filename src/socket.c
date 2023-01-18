@@ -87,6 +87,7 @@ int socketListen(void *buf, size_t bufSize) {
 		close(clientfd);
 		return -1;
 	}
+
 	//Keep reading until complete message is received
 	int i;
 	for (i = 0; i < 3; i++) {

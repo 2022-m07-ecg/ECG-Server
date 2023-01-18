@@ -18,7 +18,7 @@
 
 int main(int argc, char **argv) {
 
-	uint8_t prevHash = 0;
+	uint32_t prevHash = 0;
 
 	if ( socketInit() == -1 ) {
 		return -1;
