@@ -1,21 +1,27 @@
-make:
-        @echo "Compiling file"
-        ./make.sh
+TARGET = server
+CC = gcc
+CFLAGS = -g -Wall
+LDFLAGS = -g -Wall
+SRC_DIR = src
+BUILD_DIR = build
+CFILES = $(wildcard $(SRC_DIR)/*.c)
+OBJS = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(CFILES))
 
-rundb:
-        ./db
-run:
-        ./main
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) $(LDFLAGS) $^ -o $@
+
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+.PHONY: clean
 
 clean:
-        rm ./main
-        rm ./db
+	rm -f $(BUILD_DIR)/* $(TARGET) tmp/*
 
+makedb:
+	./make.sh
 
-makeclean:
-        rm ./main
-        rm ./db
-        ./make.sh
-
-say_hello:
-        @echo "Hello World"
+rundb:
+	./db
