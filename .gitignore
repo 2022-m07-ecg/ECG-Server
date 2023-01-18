@@ -3,3 +3,5 @@ server
 tmp/
 .vscode
 db
+test/*
+!test/input_gen.c

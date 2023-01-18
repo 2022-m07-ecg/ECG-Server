@@ -10,11 +10,11 @@
 #define INFO_PACKET_OFST INFO_BASE + 0
 #define INFO_HASH_OFST INFO_BASE + 1
 #define INFO_DEVICE_OFST INFO_BASE + 5
-#define INFO_ECG_OFST INFO_BASE + 9
-#define BODY_OFST 17
+#define INFO_ECG_OFST INFO_BASE + 11
+#define BODY_OFST 21
 
-#define PACKET_OVRHD 21
-#define DATA_BUF_SIZE 230
+#define PACKET_OVRHD 25
+#define DATA_BUF_SIZE 256
 
 static struct packetInfo_t packetInfo;
 static struct dataSample_t dataBuffer[DATA_BUF_SIZE];
